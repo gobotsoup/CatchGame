@@ -54,7 +54,9 @@ server = http.createServer(function(req, res){
     send404(res, path);
   }
 });
-server.listen(80);
+//server.listen(8124, "127.0.0.1");
+//server.listen(8000, "192.168.1.2");
+server.listen(process.env.PORT || 8001);
 
 function sendFile(res, reqPath, path)
 {
