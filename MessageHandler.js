@@ -427,6 +427,8 @@ function ensureThereIsACatcher(client)
   else if (rooms[roomNum].users.length == 0)
   {
     rooms[roomNum].globalvars.catcher = null;
+    // handle disconnect here (no more players in room) to fix issue of Error: EADDRINUSE, Address already in use
+    process.exit(0);   
   }
 }
 

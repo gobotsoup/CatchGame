@@ -29,6 +29,10 @@ server = http.createServer(function(req, res){
   {
     sendFile(res, path, __dirname + "/static/loading.html");
   }
+  else if(path == "/instructions.html")
+  {
+    sendFile(res, path, __dirname + "/static/instructions.html");
+  }
   else if(path == "/favicon.ico")
   {
     sendFile(res, path, __dirname + "/static/favicon.ico");
@@ -54,8 +58,8 @@ server = http.createServer(function(req, res){
     send404(res, path);
   }
 });
-//server.listen(8124, "127.0.0.1");
-//server.listen(8000, "192.168.1.2");
+
+//server.listen(8080, "192.168.1.2");
 server.listen(process.env.PORT || 8001);
 
 function sendFile(res, reqPath, path)
@@ -128,10 +132,17 @@ io.on('connection', function(client){
 
   client.on('disconnect', function(){
     try{
-      messageHandler.handleDisconnect(client);
+      messageHandler.handleDisconnect(client);      
     }catch(e){exception(e);}
   });
 });
+
+process.on('exit', function () {
+  process.nextTick(function () {
+  console.log('This will not run');
+  });
+  console.log('About to exit.');
+ });
 
 function exception(e)
 {
@@ -146,7 +157,7 @@ function exception(e)
   else
   {
     console.error(JSON.stringify(e));
-  }
+  }  
 }
 
 // socket.io, I choose you

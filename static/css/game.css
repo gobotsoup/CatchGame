@@ -43,8 +43,8 @@ body {
 }
 
 #mouse_you, {
-  border-top: 3px solid white;
-  border-bottom: 3px solid white;
+  border-top: 3px solid green;
+  border-bottom: 3px solid yellow;
   border-left: 3px solid black;
   border-right: 3px solid black;
   z-index:8;
@@ -59,8 +59,8 @@ body {
 /*  border: 3px ridge white;*/
   display:none;
   position:relative;
-  background-color:black;
-  margin:0px;
+  background-color:orange;
+  margin:2px;
   margin-right:20px;
 }
 
@@ -71,6 +71,11 @@ body {
   border-bottom: 3px solid red;
   z-index:9;
   margin: 0px !important;
+}
+
+.button {
+    border: 1px solid #006;
+    background: #ccf;
 }
 
 #latencycont {
