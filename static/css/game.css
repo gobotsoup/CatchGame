@@ -93,6 +93,15 @@ body {
   z-index:999999;
 }
 
+#currentscores
+{
+  width:40%;
+  height:10%;
+  position: absolute;
+  background-color:Olive;
+  z-index: 10;
+}
+
 #scoreboard > div
 {
 /*  margin-bottom: 15px;*/

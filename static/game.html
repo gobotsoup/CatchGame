@@ -1,5 +1,4 @@
-<!doctype html>
-<!--
+<!doctype html> <!--
  Copyright 2011 Primary Technology Ltd
 
  This program is free software: you can redistribute it and/or modify
@@ -16,17 +15,15 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <html>
-  <head>
-    <title>Multi Mouse - How many mice can I mouse eater eat?</title>
-
-     <LINK rel="stylesheet" href="/static/css/game.css" type="text/css" > 
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script> <!-- jquery -->       
-    <script src="/static/js/json.js"></script> <!-- for ie -->
-    <script src="/socket.io/socket.io.js"></script> <!-- sockets -->
-    <script src="/static/js/jquery.color.js" type="text/javascript"></script> 
-    <script src="/static/js/countdown.js" type="text/javascript"></script>
-    <script>
+	<head>
+		<title>Multi Mouse - How many mice can I mouse eater eat?</title>
+		<LINK rel="stylesheet" href="/static/css/game.css" type="text/css">
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script> <!-- jquery -->
+			<script src="/static/js/json.js"></script> <!-- for ie -->
+			<script src="/socket.io/socket.io.js"></script> <!-- sockets -->
+			<script src="/static/js/jquery.color.js" type="text/javascript"></script>
+			<script src="/static/js/countdown.js" type="text/javascript"></script>
+			<script>
 
     // Saves the score of the users
     var score = [];   
@@ -154,8 +151,8 @@
         if(score[users[i]] == pointsOfFirst)
         {
           text+=", 1st :)"
-	  text += "# of users = " + users.length;
-	  text += "username: " + users[i];			   
+		  text += "# of users = " + users.length;
+	      text += "username: " + users[i];			   
         }
         else if(score[users[i]] == pointsOfSecond)
         {
@@ -167,6 +164,13 @@
         }
       
         $('#score_sum_' + users[i]).text(text);
+	if (i==0)
+           $('#currentscores').html('');
+       
+       
+        var scoreStuff = $('#currentscores').html();
+        $('#currentscores').html(scoreStuff + "<p>" + users[i] + '  ' + score[users[i]] + "</p>");
+       
         
         var thisscore;
         
@@ -651,27 +655,29 @@
    $('#embedframe').hide();
    }
     </script>
-    </head>
-    <body>
-      <div id="wrapper">
-        <!--<p id="explain"><b>Having red = fail</b></p>-->
-        <div id="connection"><p>Connecting...</p></div>
-      
-        <div id="scoreboard">
-          <!--<h3>Scoreboard<h3>-->
-        </div>
-      
-        <div id="playground">
-        	&nbsp;
-		<input type="submit" value="end round" onClick="showScoreboard(5)" class="button">
-        </div>
-        <div id="newgameincont">END OF THE ROUND! - NEW ROUND STARTS IN  
-		      <div id="newgamein"></div> SECONDS
-	      </div>
-        
-       <!--<p id="latencycont"><b>Latency: <span id="latency">0</span>ms, using <span id="transporttype">-</span></b></p>-->
-       <div id="embedframe"><a href="javascript:void(0);" onClick="closeembed();">Close this awful frame</a><br/><br/><div id="embedcode"></div></div>
-      </div>      
-  <div id="verybottom"><a target="_blank" href="/instructions.html">Instructions</a> | <a href="javascript:void(0);" onClick="showembed()">Embed</a></div>
-  </body>
+	</head>
+	<body>
+		<div id="wrapper"> <!--<p id="explain"><b>Having red = fail</b></p>-->
+			<div id="connection"><p>Connecting...</p>
+			</div>
+			<div id="currentscores"><p>Current Scores:</p>
+			</div>
+			<div id="scoreboard"> <!--<h3>Scoreboard<h3>-->
+			</div>
+			<div id="playground">
+				&nbsp; <input type="submit" value="end round" onClick="showScoreboard(5)" class="button">
+			</div>
+			<div id="newgameincont">END OF THE ROUND! - NEW ROUND STARTS IN
+				<div id="newgamein"></div>
+				SECONDS
+			</div> <!--<p id="latencycont"><b>Latency: <span id="latency">0</span>ms, using <span id="transporttype">-</span></b></p>-->
+			<div id="embedframe"><a href="javascript:void(0);" onClick="closeembed();">Close this 
+					awful frame</a><br />
+				<br />
+				<div id="embedcode"></div>
+			</div>
+		</div>
+		<div id="verybottom"><a target="_blank" href="/instructions.html">Instructions</a> |
+			<a href="javascript:void(0);" onClick="showembed()">Embed</a></div>
+	</body>
 </html>
