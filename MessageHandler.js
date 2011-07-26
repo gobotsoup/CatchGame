@@ -23,6 +23,7 @@ var socketio;
 //Saves the values of all rooms
 //key is the wallNum, values are globalvars and users, both objects
 var rooms = {};
+var userNames = {};
 
 /**
  * Sets the socketio. This function is needed to initalize the MessageHandler
@@ -99,6 +100,10 @@ exports.handleMessage = function(client, message)
     {
       handleHandshake(client, message);
     }
+    else if(message.type == "userName")
+    {
+	  setUserName(client, message);
+    }
     else if(message.type == "requestRoom")
     {
       handleRequestRoom(client, message);
@@ -116,6 +121,26 @@ exports.handleMessage = function(client, message)
 function handlePing(client, message)
 {
   client.send({type:"pingback", data: message.data});
+}
+
+function setUserName(client, message)
+{
+  if(message.data.userName == null)
+  {
+	throw "Don't have a username to set..";
+  }
+  else
+  {       
+	var userName = message.data.userName;
+	userNames[client.sessionId] = userName;
+	var msg = {
+    message: [client.sessionId, "userName:" + userName]
+	};
+    console.log("message handler set username" + msg.message);
+
+	//broadcast this username to every user and the client itself
+	broadcast2room(client, msg);		
+  }
 }
 
 /**
@@ -225,13 +250,13 @@ function broadcast2room(client, message)
   
   //If there is a session to this room, send the message to all sessions in this room
   if(room != null)
-  {
+  {	
     for(i in room2sessions[room])
     {
       if(room2sessions[room][i] != client.sessionId)
       {
         socketio.clients[room2sessions[room][i]].send(message);
-      }
+      }      
     }
   }
   else
@@ -289,6 +314,17 @@ function onGameConnect(client)
       if (value != "sessionId" && rooms[roomNum].users[i][value] != null && rooms[roomNum].users[i][value].message) 
         buffer.push(rooms[roomNum].users[i][value]);
     }
+  }
+ 
+  // Add all of the existing usernames
+  for (i =0; i < rooms[roomNum].users.length; i++)
+  {
+      var userName = userNames[rooms[roomNum].users[i].sessionId];
+      console.log("username was" + userName);
+      var message = {
+	  message: [rooms[roomNum].users[i].sessionId, "userName:" + userName]
+      };
+      buffer.push (message);      
   }
 
   //Add yourself to the users array

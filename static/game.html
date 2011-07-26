@@ -35,6 +35,8 @@
     var catchTime=-1;
     // A array with the userids of all players
     var users = [];
+    // An array to hold the names of the players
+    var names = [];
     // The unix time the last ping was send, needs the calculate the difference to the pingback
     var timePingStart = -1;
     // A flag to show if the connection is etablished
@@ -115,7 +117,9 @@
           {
             socket.send('score:' + 0);
           }  
-        }   
+        }
+        if(names[users[i]] == null)
+			names[users[i]] = "user" + i;
       
         //log("lasttimeusermove: " + userslastMove[users[i]]);
         //log("time: " + new Date().getTime());
@@ -150,9 +154,7 @@
         
         if(score[users[i]] == pointsOfFirst)
         {
-          text+=", 1st :)"
-		  text += "# of users = " + users.length;
-	      text += "username: " + users[i];			   
+          text+=", 1st :)"	      
         }
         else if(score[users[i]] == pointsOfSecond)
         {
@@ -164,13 +166,11 @@
         }
       
         $('#score_sum_' + users[i]).text(text);
-	if (i==0)
-           $('#currentscores').html('');
-       
+		if (i==0)
+           $('#currentscores').html('');       
        
         var scoreStuff = $('#currentscores').html();
-        $('#currentscores').html(scoreStuff + "<p>" + users[i] + '  ' + score[users[i]] + "</p>");
-       
+        $('#currentscores').html(scoreStuff + "<p>" + names[users[i]] + '  ' + score[users[i]] + "</p>");       
         
         var thisscore;
         
@@ -216,7 +216,7 @@
         return;
       }
      
-      log(obj);
+      //log("game.html" + obj);
      
       if(obj.message != null)
       {
@@ -263,6 +263,10 @@
             userid = "you";
           
           score[userid] = Number(data[1]);
+        }
+        else if(data[0] == "userName")
+        {
+          names[userid] = data[1];		  
         }
         else if(data[0] == "global" && data[1] == "catcher")
         {
@@ -351,7 +355,7 @@
    function log(str)
    {
      if(window.console)
-       console.log(str);
+       console.log(str);     
    }      
    
    /**
@@ -378,7 +382,7 @@
        $('#playground').append('<div class="dot" style="background-color:'+color+';top:' + top + 'px;left:' + left + 'px "id="mouse_'+ userid +'"/\>');
        $('#scoreboard').append('<div id="score_' + userid + '"><div id="score_color_' + userid + 
           '" class="score_color" style="background-color: ' + color + '">&nbsp;<div class="score_points" id="score_sum_' + userid + '">0</div></div></div>');
-       users.push(userid);
+       users.push(userid);      
      }
    }
    
@@ -577,8 +581,27 @@
           
        lastMouseX=mouseX;
        lastMouseY=mouseY;
-     }
-   }      
+     }     
+   }
+   
+   function setUserName()
+   {
+     var username = document.nameChange.username.value;          
+     
+     $('#usernameScreen').remove();
+     //alert(users.length +  "= userlength");
+     for(var i=0 ; i<users.length ; i++)
+     {  
+	   if (users[i] == "you")
+	   {
+	     if (username == "Enter your name here!")
+			username = "User" + i;
+		 names[users[i]] = username;
+		 //alert("user#"+i+" of"+users.length+ names[users[i]]);
+	   }
+     }     
+     socket.send({type:"userName", "data":{"userName": username}});     
+   }
            
    /**
      * Connect to the server via socket.io
@@ -589,12 +612,13 @@
      socket.connect();
       
      socket.on('connect', function(obj)
-     { 
-       //What's the room Number?
-       var roomNum= document.URL.substring(document.URL.lastIndexOf("/")+1);
-       
-       //send handshake
-       socket.send({type:"handshake", "data":{"roomNum":roomNum}});
+     {
+       	//What's the room Number?
+		var roomNum= document.URL.substring(document.URL.lastIndexOf("/")+1);
+		//send handshake     
+		socket.send({type:"handshake", "data":{"roomNum":roomNum}});
+        $('#usernameScreen').fadeIn();
+        $('#usernameScreen').animate({width: 100 + "%"});              
      }); 
       
      socket.on('message', function(obj)
@@ -660,12 +684,17 @@
 		<div id="wrapper"> <!--<p id="explain"><b>Having red = fail</b></p>-->
 			<div id="connection"><p>Connecting...</p>
 			</div>
+			<div id="usernameScreen"> 
+				<form name="nameChange">
+					<input type="button" value="Set Username" onClick="setUserName()" class="nameButton">
+					<input type="text" name="username" size="25"  placeholder="Enter your name" class="nameText" ID="Text1">
+				</form>				
+			</div>
 			<div id="currentscores"><p>Current Scores:</p>
 			</div>
 			<div id="scoreboard"> <!--<h3>Scoreboard<h3>-->
 			</div>
 			<div id="playground">
-				&nbsp; <input type="submit" value="end round" onClick="showScoreboard(5)" class="button">
 			</div>
 			<div id="newgameincont">END OF THE ROUND! - NEW ROUND STARTS IN
 				<div id="newgamein"></div>

@@ -78,6 +78,18 @@ body {
     background: #ccf;
 }
 
+.nameButton {
+    border: 10px solid #006;
+    background: orange;
+    z-index:9;
+}
+
+.nameText {
+    border: 5px solid #197;
+    background: green;
+    z-index: 9;
+}
+
 #latencycont {
 	display:none;
 }
@@ -93,12 +105,24 @@ body {
   z-index:999999;
 }
 
+#usernameScreen
+{
+	display:none;
+	width:20px;
+	height:100%;
+	position:absolute;
+	right:0px;
+	background-color:Blue;
+	z-index:6;
+}
+
 #currentscores
 {
   width:40%;
   height:10%;
   position: absolute;
   background-color:Olive;
+  opacity:0.4;
   z-index: 10;
 }
 
